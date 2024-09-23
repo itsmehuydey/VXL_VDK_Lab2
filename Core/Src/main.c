@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "bai1.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -194,16 +194,30 @@ static void MX_GPIO_Init(void)
 
   /* GPIO Ports Clock Enable */
   __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(Led_red_GPIO_Port, Led_red_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, Led_red_Pin|EN0_Pin|EN1_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : Led_red_Pin */
-  GPIO_InitStruct.Pin = Led_red_Pin;
+  /*Configure GPIO pin Output Level */
+  HAL_GPIO_WritePin(GPIOB, seg1_Pin|seg2_Pin|seg3_Pin|seg4_Pin
+                          |seg5_Pin|seg6_Pin|seg7_Pin, GPIO_PIN_RESET);
+
+  /*Configure GPIO pins : Led_red_Pin EN0_Pin EN1_Pin */
+  GPIO_InitStruct.Pin = Led_red_Pin|EN0_Pin|EN1_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(Led_red_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /*Configure GPIO pins : seg1_Pin seg2_Pin seg3_Pin seg4_Pin
+                           seg5_Pin seg6_Pin seg7_Pin */
+  GPIO_InitStruct.Pin = seg1_Pin|seg2_Pin|seg3_Pin|seg4_Pin
+                          |seg5_Pin|seg6_Pin|seg7_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 }
 
@@ -217,6 +231,40 @@ static void MX_GPIO_Init(void)
 //  HAL_GPIO_TogglePin ( Led_red_GPIO_Port , Led_red_Pin ) ;
 // }
 // }
+
+int counter = 50;
+int activeDisplay = 0;  // 0 for first display, 1 for second
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    counter--;
+    if (counter <= 0) {
+        counter = 50;
+
+        // Alternate between the two displays
+        if (activeDisplay == 0) {
+            // Enable first display, disable second
+            HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET); // Activate first display
+            HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);   // Deactivate second display
+
+            // Display '1' on the first 7-segment display
+            display7SEG(1);
+            activeDisplay = 1;  // Next time, switch to the second display
+        } else {
+            // Enable second display, disable first
+            HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+            HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
+
+            // Display '2' on the second 7-segment display
+            display7SEG(2);
+            activeDisplay = 0;  // Next time, switch to the first display
+        }
+
+        // Optionally, toggle an LED for visual feedback (e.g., pin A5)
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+    }
+}
+
 /* USER CODE END 4 */
 
 /**
