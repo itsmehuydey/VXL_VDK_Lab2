@@ -80,7 +80,7 @@ Disassembly of section .text:
  *  Created on: Sep 23, 2024
  *      Author: pc
  */
-#include "bai1.h"
+#include "Bai1.h"
 void display7SEG(int number)
 {
  800014c:	b580      	push	{r7, lr}
@@ -827,12 +827,12 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
  80005f8:	e00f      	b.n	800061a <HAL_TIM_PeriodElapsedCallback+0x6a>
         } else {
             // Enable second display, disable first
-            HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);   // Deactivate first display
+            HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
  80005fa:	2201      	movs	r2, #1
  80005fc:	2140      	movs	r1, #64	; 0x40
  80005fe:	480d      	ldr	r0, [pc, #52]	; (8000634 <HAL_TIM_PeriodElapsedCallback+0x84>)
  8000600:	f000 fbbe 	bl	8000d80 <HAL_GPIO_WritePin>
-            HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET); // Activate second display
+            HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
  8000604:	2200      	movs	r2, #0
  8000606:	2180      	movs	r1, #128	; 0x80
  8000608:	480a      	ldr	r0, [pc, #40]	; (8000634 <HAL_TIM_PeriodElapsedCallback+0x84>)

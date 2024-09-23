@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "bai1.h"
+#include "Bai1.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

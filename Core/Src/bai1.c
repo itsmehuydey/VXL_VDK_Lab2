@@ -4,7 +4,7 @@
  *  Created on: Sep 23, 2024
  *      Author: pc
  */
-#include "bai1.h"
+#include "Bai1.h"
 void display7SEG(int number)
 {
     HAL_GPIO_WritePin(seg1_GPIO_Port, seg1_Pin, SET);
