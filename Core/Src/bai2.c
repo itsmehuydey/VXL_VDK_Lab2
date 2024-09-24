@@ -6,56 +6,56 @@
  */
 #include "bai2.h"
 
-int counter7Seg = 50;
-int counterDot = 100;
-int currentIndex7Seg = 0;
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    if (counter7Seg <= 0) {
-        counter7Seg = 50;
-        switch (currentIndex7Seg) {
-            case 0:
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6); // TURN OFF SEG 0
-                display7SEG(0);
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7); // TURN ON SEG 1
-                ++currentIndex7Seg;
-                break;
-
-            case 1:
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7); // TURN OFF SEG 1
-                display7SEG(0);
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8); // TURN ON SEG 2
-                ++currentIndex7Seg;
-                break;
-
-            case 2:
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8); // TURN OFF SEG 2
-                display7SEG(3);
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9); // TURN ON SEG 3
-                ++currentIndex7Seg;
-                break;
-
-            case 3:
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9); // TURN OFF SEG 3
-                display7SEG(0);
-                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6); // TURN ON SEG 0
-                currentIndex7Seg = 0;
-                break;
-
-            default:
-                break;
-        }
-    } else {
-        --counter7Seg;
-    }
-
-    if (counterDot <= 0) {
-        counterDot = 100;
-        HAL_GPIO_TogglePin(GPIOA, DOT_Pin);
-    } else {
-        --counterDot;
-    }
-}
+//int counter7Seg = 50;
+//int counterDot = 100;
+//int currentIndex7Seg = 0;
+//
+//void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+//    if (counter7Seg <= 0) {
+//        counter7Seg = 50;
+//        switch (currentIndex7Seg) {
+//            case 0:
+//                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6); // TURN OFF SEG 0
+//                display7SEG(0);
+//                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7); // TURN ON SEG 1
+//                ++currentIndex7Seg;
+//                break;
+//
+//            case 1:
+//                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7); // TURN OFF SEG 1
+//                display7SEG(0);
+//                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8); // TURN ON SEG 2
+//                ++currentIndex7Seg;
+//                break;
+//
+//            case 2:
+//                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8); // TURN OFF SEG 2
+//                display7SEG(3);
+//                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9); // TURN ON SEG 3
+//                ++currentIndex7Seg;
+//                break;
+//
+//            case 3:
+//                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9); // TURN OFF SEG 3
+//                display7SEG(0);
+//                HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6); // TURN ON SEG 0
+//                currentIndex7Seg = 0;
+//                break;
+//
+//            default:
+//                break;
+//        }
+//    } else {
+//        --counter7Seg;
+//    }
+//
+//    if (counterDot <= 0) {
+//        counterDot = 100;
+//        HAL_GPIO_TogglePin(GPIOA, DOT_Pin);
+//    } else {
+//        --counterDot;
+//    }
+//}
 
 void display7SEG(int number)
 {
