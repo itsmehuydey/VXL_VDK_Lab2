@@ -96,8 +96,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  800015c:	4b39      	ldr	r3, [pc, #228]	; (8000244 <HAL_TIM_PeriodElapsedCallback+0xf8>)
  800015e:	2232      	movs	r2, #50	; 0x32
  8000160:	601a      	str	r2, [r3, #0]
-
-        // Turn off the current segment before switching to the next
         switch (currentIndex7Seg) {
  8000162:	4b39      	ldr	r3, [pc, #228]	; (8000248 <HAL_TIM_PeriodElapsedCallback+0xfc>)
  8000164:	681b      	ldr	r3, [r3, #0]
@@ -114,8 +112,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  8000180:	2140      	movs	r1, #64	; 0x40
  8000182:	4832      	ldr	r0, [pc, #200]	; (800024c <HAL_TIM_PeriodElapsedCallback+0x100>)
  8000184:	f000 fe56 	bl	8000e34 <HAL_GPIO_TogglePin>
-                display7SEG(2); // Display number 2 on the 7-segment
- 8000188:	2002      	movs	r0, #2
+                display7SEG(0);
+ 8000188:	2000      	movs	r0, #0
  800018a:	f000 f863 	bl	8000254 <display7SEG>
                 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_7); // TURN ON SEG 1
  800018e:	2180      	movs	r1, #128	; 0x80
@@ -135,8 +133,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  80001a2:	2180      	movs	r1, #128	; 0x80
  80001a4:	4829      	ldr	r0, [pc, #164]	; (800024c <HAL_TIM_PeriodElapsedCallback+0x100>)
  80001a6:	f000 fe45 	bl	8000e34 <HAL_GPIO_TogglePin>
-                display7SEG(3); // Display number 3 on the 7-segment
- 80001aa:	2003      	movs	r0, #3
+                display7SEG(0);
+ 80001aa:	2000      	movs	r0, #0
  80001ac:	f000 f852 	bl	8000254 <display7SEG>
                 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_8); // TURN ON SEG 2
  80001b0:	f44f 7180 	mov.w	r1, #256	; 0x100
@@ -156,8 +154,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  80001c6:	f44f 7180 	mov.w	r1, #256	; 0x100
  80001ca:	4820      	ldr	r0, [pc, #128]	; (800024c <HAL_TIM_PeriodElapsedCallback+0x100>)
  80001cc:	f000 fe32 	bl	8000e34 <HAL_GPIO_TogglePin>
-                display7SEG(0); // Display number 0 on the 7-segment
- 80001d0:	2000      	movs	r0, #0
+                display7SEG(3);
+ 80001d0:	2003      	movs	r0, #3
  80001d2:	f000 f83f 	bl	8000254 <display7SEG>
                 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_9); // TURN ON SEG 3
  80001d6:	f44f 7100 	mov.w	r1, #512	; 0x200
@@ -177,8 +175,8 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  80001ec:	f44f 7100 	mov.w	r1, #512	; 0x200
  80001f0:	4816      	ldr	r0, [pc, #88]	; (800024c <HAL_TIM_PeriodElapsedCallback+0x100>)
  80001f2:	f000 fe1f 	bl	8000e34 <HAL_GPIO_TogglePin>
-                display7SEG(1); // Display number 1 on the 7-segment
- 80001f6:	2001      	movs	r0, #1
+                display7SEG(0);
+ 80001f6:	2000      	movs	r0, #0
  80001f8:	f000 f82c 	bl	8000254 <display7SEG>
                 HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_6); // TURN ON SEG 0
  80001fc:	2140      	movs	r1, #64	; 0x40
@@ -206,7 +204,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  8000218:	bf00      	nop
     }
 
-    // Handle dot blinking
     if (counterDot <= 0) {
  800021a:	4b0d      	ldr	r3, [pc, #52]	; (8000250 <HAL_TIM_PeriodElapsedCallback+0x104>)
  800021c:	681b      	ldr	r3, [r3, #0]
@@ -216,7 +213,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
  8000222:	4b0b      	ldr	r3, [pc, #44]	; (8000250 <HAL_TIM_PeriodElapsedCallback+0x104>)
  8000224:	2264      	movs	r2, #100	; 0x64
  8000226:	601a      	str	r2, [r3, #0]
-        HAL_GPIO_TogglePin(GPIOA, DOT_Pin); // Toggle the dot
+        HAL_GPIO_TogglePin(GPIOA, DOT_Pin);
  8000228:	2110      	movs	r1, #16
  800022a:	4808      	ldr	r0, [pc, #32]	; (800024c <HAL_TIM_PeriodElapsedCallback+0x100>)
  800022c:	f000 fe02 	bl	8000e34 <HAL_GPIO_TogglePin>
