@@ -226,62 +226,30 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-const int MAX_LED = 4;
-int index_led = 0;
-int led_buffer[4] = {1, 2, 3, 4};
-int counter7Seg =50;
+int counter7Seg = 100; // 1000 ms= 100*10 ms
+int counterDot = 100; // 1000 ms = 100*10 ms
+int index_led =0;
 
-
-
-void update7SEG(int index) {
-    // Turn off all segments first
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); // Turn off SEG 0
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET); // Turn off SEG 1
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET); // Turn off SEG 2
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET); // Turn off SEG 3
-
-
-    switch (index) {
-        case 0:
-        	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
-            display7SEG(led_buffer[0]);
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
-            break;
-        case 1:
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
-            display7SEG(led_buffer[1]);
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
-            break;
-        case 2:
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
-
-            display7SEG(led_buffer[2]);
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
-            break;
-        case 3:
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
-            display7SEG(led_buffer[3]);
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
-            break;
-        default:
-            break;
+void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
+{
+    if( counter7Seg <= 0) {
+        counter7Seg = 100;
+        ++index_led;
+        index_led = index_led % 4;
+        update7SEG(index_led);
     }
-}
-
-
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    if (counter7Seg <= 0) {
-        counter7Seg = 50;
-        update7SEG(index_led++);
-        if (index_led >= MAX_LED) {
-            index_led = 0;
-        }
-    } else {
+    else {
         --counter7Seg;
     }
-}
 
+    if( counterDot <= 0) {
+        counterDot = 100;
+        HAL_GPIO_TogglePin ( GPIOA, GPIO_PIN_4 );
+    }
+    else {
+        --counterDot;
+    }
+}
 
 
 
