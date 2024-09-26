@@ -785,23 +785,22 @@ void update7SEG(int index) {
  80005b6:	b082      	sub	sp, #8
  80005b8:	af00      	add	r7, sp, #0
  80005ba:	6078      	str	r0, [r7, #4]
-    // Turn off all segments first
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); // Turn off SEG 0
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
  80005bc:	2201      	movs	r2, #1
  80005be:	2140      	movs	r1, #64	; 0x40
  80005c0:	4835      	ldr	r0, [pc, #212]	; (8000698 <update7SEG+0xe4>)
  80005c2:	f000 fc55 	bl	8000e70 <HAL_GPIO_WritePin>
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET); // Turn off SEG 1
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
  80005c6:	2201      	movs	r2, #1
  80005c8:	2180      	movs	r1, #128	; 0x80
  80005ca:	4833      	ldr	r0, [pc, #204]	; (8000698 <update7SEG+0xe4>)
  80005cc:	f000 fc50 	bl	8000e70 <HAL_GPIO_WritePin>
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET); // Turn off SEG 2
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
  80005d0:	2201      	movs	r2, #1
  80005d2:	f44f 7180 	mov.w	r1, #256	; 0x100
  80005d6:	4830      	ldr	r0, [pc, #192]	; (8000698 <update7SEG+0xe4>)
  80005d8:	f000 fc4a 	bl	8000e70 <HAL_GPIO_WritePin>
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET); // Turn off SEG 3
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
  80005dc:	2201      	movs	r2, #1
  80005de:	f44f 7100 	mov.w	r1, #512	; 0x200
  80005e2:	482d      	ldr	r0, [pc, #180]	; (8000698 <update7SEG+0xe4>)
@@ -905,10 +904,10 @@ void update7SEG(int index) {
  800069c:	20000000 	.word	0x20000000
 
 080006a0 <HAL_TIM_PeriodElapsedCallback>:
-int counter7Seg = 100; // 1000 ms= 100*10 ms
-int counterDot = 100; // 1000 ms = 100*10 ms
-int index_led =-1;
 
+int counter7Seg = 100;
+int counterDot = 100;
+int index_led =-1;
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
  80006a0:	b580      	push	{r7, lr}

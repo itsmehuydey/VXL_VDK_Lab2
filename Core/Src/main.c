@@ -230,11 +230,10 @@ int led_buffer[4] = {1, 2, 3, 4};
 
 
 void update7SEG(int index) {
-    // Turn off all segments first
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); // Turn off SEG 0
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET); // Turn off SEG 1
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET); // Turn off SEG 2
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET); // Turn off SEG 3
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
 
 
     switch (index) {
@@ -265,10 +264,9 @@ void update7SEG(int index) {
 }
 
 
-int counter7Seg = 100; // 1000 ms= 100*10 ms
-int counterDot = 100; // 1000 ms = 100*10 ms
+int counter7Seg = 100;
+int counterDot = 100;
 int index_led =-1;
-
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
     if( counter7Seg <= 0) {
