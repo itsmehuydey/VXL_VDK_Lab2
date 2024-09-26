@@ -250,7 +250,6 @@ void update7SEG(int index) {
             break;
         case 2:
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
-
             display7SEG(led_buffer[2]);
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
             break;

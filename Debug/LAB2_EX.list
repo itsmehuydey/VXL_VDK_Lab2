@@ -860,7 +860,6 @@ void update7SEG(int index) {
  8000646:	f44f 7180 	mov.w	r1, #256	; 0x100
  800064a:	4813      	ldr	r0, [pc, #76]	; (8000698 <update7SEG+0xe4>)
  800064c:	f000 fc10 	bl	8000e70 <HAL_GPIO_WritePin>
-
             display7SEG(led_buffer[2]);
  8000650:	4b12      	ldr	r3, [pc, #72]	; (800069c <update7SEG+0xe8>)
  8000652:	689b      	ldr	r3, [r3, #8]
