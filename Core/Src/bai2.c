@@ -140,12 +140,12 @@ void display7SEG(int number)
     }
 }
 
-//void clearNumber(){
-//    HAL_GPIO_WritePin(seg1_GPIO_Port, seg1_Pin, SET);
-//    HAL_GPIO_WritePin(seg2_GPIO_Port, seg2_Pin, SET);
-//    HAL_GPIO_WritePin(seg3_GPIO_Port, seg3_Pin, SET);
-//    HAL_GPIO_WritePin(seg4_GPIO_Port, seg4_Pin, SET);
-//    HAL_GPIO_WritePin(seg6_GPIO_Port, seg6_Pin, SET);
-//    HAL_GPIO_WritePin(seg5_GPIO_Port, seg5_Pin, SET);
-//    HAL_GPIO_WritePin(seg7_GPIO_Port, seg7_Pin, SET);
-//}
+void clearNumber(){
+    HAL_GPIO_WritePin(seg1_GPIO_Port, seg1_Pin, SET);
+    HAL_GPIO_WritePin(seg2_GPIO_Port, seg2_Pin, SET);
+    HAL_GPIO_WritePin(seg3_GPIO_Port, seg3_Pin, SET);
+    HAL_GPIO_WritePin(seg4_GPIO_Port, seg4_Pin, SET);
+    HAL_GPIO_WritePin(seg6_GPIO_Port, seg6_Pin, SET);
+    HAL_GPIO_WritePin(seg5_GPIO_Port, seg5_Pin, SET);
+    HAL_GPIO_WritePin(seg7_GPIO_Port, seg7_Pin, SET);
+}
