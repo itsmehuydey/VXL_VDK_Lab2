@@ -267,6 +267,20 @@ void update7SEG(int index) {
 int counter7Seg = 100; // 1000 ms= 100*10 ms
 int counterDot = 100; // 1000 ms = 100*10 ms
 int index_led =-1;
+int hour, minute;
+
+
+void updateClockBuffer () {
+    int segment0 = hour / 10;
+    int segment1 = hour % 10;
+    int segment2 = minute / 10;
+    int segment3 = minute % 10;
+
+    led_buffer[0] = segment0;
+    led_buffer[1] = segment1;
+    led_buffer[2] = segment2;
+    led_buffer[3] = segment3;
+}
 
 void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
 {
@@ -288,7 +302,6 @@ void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
         --counterDot;
     }
 }
-
 
 
 /* USER CODE END 4 */
