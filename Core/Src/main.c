@@ -94,13 +94,101 @@ HAL_TIM_Base_Start_IT (& htim2 ) ;
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-    /* USER CODE END WHILE */
+setTimer0 (1000) ;
+const int MAX_LED = 4;
+int led_buffer[10] = {0,1, 2, 3, 4,5,6,7,8,9};
+int counter7Seg = 100;  // 1000 ms = 100 * 10 ms
+int counterDot = 100;   // 1000 ms = 100 * 10 ms
+int index_led = -1;     // Index for 7-segment display
+int hour = 0, minute = 0, second = 0;  // Variables for time
+int timer0_flag = 0, counter7Seg_FLAG=0, counterDot_FLAG = 0;
+while(1) {
+    if(timer0_flag == 1) {
+        ++second;
+        if(second >= 60) {
+            second = 0;
+            ++minute;
+        }
 
+        if(minute >= 60) {
+            minute = 0;
+            ++hour;
+        }
+
+        if(hour >= 24) {
+            hour = 0;
+        }
+
+        updateClockBuffer();
+        setTimer0(1000);
+    }
+
+    if(counter7Seg_FLAG == 1) {
+        update7SEG(led_buffer[10]);
+        counter7Seg_FLAG = 0;
+    }
+
+    if(counterDot_FLAG == 1) {
+        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+        counterDot_FLAG = 0;
+    }
     /* USER CODE BEGIN 3 */
+}
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  timer_run();  // Handle the software timers
+
+  // Handle 7-segment display software timer
+  if(counter7Seg <= 0) {
+    counter7Seg = 50;  // Reset the counter to 500ms (50 * 10ms)
+    ++index_led;
+    index_led = index_led % 4;  // Rotate through 4 digits
+    counter7Seg_FLAG = 1;  // Set the flag to update the display in the main loop
+  } else {
+    --counter7Seg;
   }
-  /* USER CODE END 3 */
+
+  // Handle dot toggle software timer
+  if(counterDot <= 0) {
+    counterDot = 100;  // Reset the counter to 1000ms (100 * 10ms)
+    counterDot_FLAG = 1;  // Set the flag to toggle the dot in the main loop
+  } else {
+    --counterDot;
+  }
+}
+  void update7SEG(int index) {
+      // Turn off all the 7-segment display positions (SEG 0 to SEG 3)
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); // Turn off SEG 0
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET); // Turn off SEG 1
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET); // Turn off SEG 2
+      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET); // Turn off SEG 3
+
+      switch (index) {
+          case 0:
+              HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); // Select SEG 0
+              display7SEG(led_buffer[hour / 10]);  // Display tens digit of hour
+              HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+              break;
+          case 1:
+              HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET); // Select SEG 1
+              display7SEG(led_buffer[hour % 10]);  // Display ones digit of hour
+              HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+              break;
+          case 2:
+              HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET); // Select SEG 2
+              display7SEG(led_buffer[minute / 10]);  // Display tens digit of minute
+              HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+              break;
+          case 3:
+              HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET); // Select SEG 3
+              display7SEG(led_buffer[minute % 10]);  // Display ones digit of minute
+              HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+              break;
+          default:
+              break;
+      }
+  }
+
 }
 
 /**
@@ -225,48 +313,47 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-const int MAX_LED = 4;
-int led_buffer[4] = {1, 2, 3, 4};
-
-
-void update7SEG(int index) {
-    // Turn off all segments first
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET); // Turn off SEG 0
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET); // Turn off SEG 1
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET); // Turn off SEG 2
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET); // Turn off SEG 3
-
-
-    switch (index) {
-        case 0:
-        	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
-            display7SEG(led_buffer[0]);
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
-            break;
-        case 1:
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
-            display7SEG(led_buffer[1]);
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
-            break;
-        case 2:
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
-            display7SEG(led_buffer[2]);
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
-            break;
-        case 3:
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
-            display7SEG(led_buffer[3]);
-            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
-            break;
-        default:
-            break;
-    }
-}
-
-
-int counter7Seg = 100; // 1000 ms= 100*10 ms
-int counterDot = 100; // 1000 ms = 100*10 ms
-int index_led =-1;
+//const int MAX_LED = 4;
+//int led_buffer[10] = {0,1, 2, 3, 4,5,6,7,8,9};
+//
+//
+//void update7SEG(int index) {
+//    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET); // Turn off SEG 0
+//    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET); // Turn off SEG 1
+//    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET); // Turn off SEG 2
+//    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET); // Turn off SEG 3
+//
+//
+//    switch (index) {
+//        case 0:
+//        	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
+//            display7SEG(index);
+//            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
+//            break;
+//        case 1:
+//            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_SET);
+//            display7SEG(index);
+//            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_7, GPIO_PIN_RESET);
+//            break;
+//        case 2:
+//            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
+//            display7SEG(index);
+//            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
+//            break;
+//        case 3:
+//            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_SET);
+//            display7SEG(index);
+//            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_9, GPIO_PIN_RESET);
+//            break;
+//        default:
+//            break;
+//    }
+//}
+//
+//
+//int counter7Seg = 100; // 1000 ms= 100*10 ms
+//int counterDot = 100; // 1000 ms = 100*10 ms
+//int index_led =-1;
 int hour, minute;
 
 
@@ -275,33 +362,32 @@ void updateClockBuffer () {
     int segment1 = hour % 10;
     int segment2 = minute / 10;
     int segment3 = minute % 10;
-
     led_buffer[0] = segment0;
     led_buffer[1] = segment1;
     led_buffer[2] = segment2;
     led_buffer[3] = segment3;
 }
 
-void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
-{
-    if( counter7Seg <= 0) {
-        counter7Seg = 100;
-        ++index_led;
-        index_led = index_led % 4;
-        update7SEG(index_led);
-    }
-    else {
-        --counter7Seg;
-    }
-
-    if( counterDot <= 0) {
-        counterDot = 100;
-        HAL_GPIO_TogglePin ( GPIOA, GPIO_PIN_4 );
-    }
-    else {
-        --counterDot;
-    }
-}
+//void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
+//{
+//    if( counter7Seg <= 0) {
+//        counter7Seg = 100;
+//        ++index_led;
+//        index_led = index_led % 4;
+//        update7SEG(index_led);
+//    }
+//    else {
+//        --counter7Seg;
+//    }
+//
+//    if( counterDot <= 0) {
+//        counterDot = 100;
+//        HAL_GPIO_TogglePin ( GPIOA, GPIO_PIN_4 );
+//    }
+//    else {
+//        --counterDot;
+//    }
+//}
 
 
 /* USER CODE END 4 */
