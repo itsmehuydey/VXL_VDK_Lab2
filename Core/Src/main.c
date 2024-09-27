@@ -111,11 +111,77 @@ HAL_TIM_Base_Start_IT (& htim2 ) ;
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	  setTimer0 (1000) ;
+	  int timer0_flag = 0;       // Cờ để kiểm tra thời gian của timer 0
+	  int counterDot_FLAG = 0, counter7Seg_FLAG=0, index_led=-1;   // Cờ để kiểm tra khi cần thay đổi trạng thái của dot
+	  const int MAX_LED = 4;
+	  int led_buffer[4] = {1, 2, 3, 4};
+
+	  int second = 0;            // Biến lưu số giây
+	  int minute = 0;            // Biến lưu số phút
+	  int hour = 0;              // Biến lưu số giờ
+	  void updateClockBuffer() {
+	      int segment0 = hour / 10;
+	      int segment1 = hour % 10;
+	      int segment2 = minute / 10;
+	      int segment3 = minute % 10;
+
+	      led_buffer[0] = segment0;
+	      led_buffer[1] = segment1;
+	      led_buffer[2] = segment2;
+	      led_buffer[3] = segment3;
+	  }
+
+//	  void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim) {
+//	      timer_run();
+//	      if(counter7Seg <= 0) {
+//	          counter7Seg = 50;
+//	          ++index_led;
+//	          index_led = index_led % 4;
+//	          counter7Seg_FLAG = 1;
+//	      } else {
+//	          --counter7Seg;
+//	      }
+//
+//	      if(counterDot <= 0) {
+//	          counterDot = 100;
+//	          counterDot_FLAG = 1;
+//	      } else {
+//	          --counterDot;
+//	      }
+//	  }
+
+
 	   while (1) {
-	   if( timer0_flag == 1) {
-	   HAL_GPIO_TogglePin ( Led_red_GPIO_Port , Led_red_Pin ) ;
-	  setTimer0 (1000) ;
-	   }
+//	   if( timer0_flag == 1) {
+//	   HAL_GPIO_TogglePin ( Led_red_GPIO_Port , Led_red_Pin ) ;
+//	  setTimer0 (1000) ;
+//	   }
+		   if(timer0_flag == 1) {
+		       ++second;
+		       if(second >= 60) {
+		           second = 0;
+		           ++minute;
+		       }
+
+		       if(minute >= 60) {
+		           minute = 0;
+		           ++hour;
+		       }
+
+		       if(hour >= 24) {
+		           hour = 0;
+		       }
+
+		       updateClockBuffer();
+		       setTimer0(1000);
+		   }
+
+		   if(counterDot_FLAG == 1) {
+		       HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
+		       counterDot_FLAG = 0;
+		   }
+
+
 	   }
     /* USER CODE BEGIN 3 */
   /* USER CODE END 3 */
@@ -245,8 +311,6 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 
 
-const int MAX_LED = 4;
-int led_buffer[4] = {1, 2, 3, 4};
 
 
 void update7SEG(int index) {
@@ -260,7 +324,7 @@ void update7SEG(int index) {
     switch (index) {
         case 0:
         	HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_SET);
-            display7SEG(index);
+            display7SEG(led_buffer[0] );
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_6, GPIO_PIN_RESET);
             break;
         case 1:
@@ -284,30 +348,20 @@ void update7SEG(int index) {
 }
 
 
-int counter7Seg = 100; // 1000 ms= 100*10 ms
-int counterDot = 100; // 1000 ms = 100*10 ms
-int index_led =-1;
-int hour, minute;
+//int counter7Seg = 100; // 1000 ms= 100*10 ms
+//int counterDot = 100; // 1000 ms = 100*10 ms
+//int index_led =-1;
+//int hour, minute;
 
 
-void updateClockBuffer () {
-    int segment0 = hour / 10;
-    int segment1 = hour % 10;
-    int segment2 = minute / 10;
-    int segment3 = minute % 10;
 
-    led_buffer[0] = segment0;
-    led_buffer[1] = segment1;
-    led_buffer[2] = segment2;
-    led_buffer[3] = segment3;
-}
-
-void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
-{
-
- timer_run () ;
-
- }
+//
+//void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
+//{
+//
+// timer_run () ;
+//
+// }
 
 
 /* USER CODE END 4 */
