@@ -181,7 +181,6 @@ int main(void)
   void update7SEG ( int index ) {
       switch ( index ) {
           case 0:
-              //Display the first 7 SEG with led_buffer [0]
   			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 0);
   			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 1);
   			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 1);
@@ -189,7 +188,6 @@ int main(void)
   			display7SEG(led_buffer[index]);
               break ;
           case 1:
-              // Display the second 7 SEG with led_buffer [1]
   			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 1);
   			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 0);
   			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 1);
@@ -197,7 +195,6 @@ int main(void)
   			display7SEG(led_buffer[index]);
           	break ;
           case 2:
-              // Display the third 7 SEG with led_buffer [2]
   			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 1);
   			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 1);
   			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 0);
@@ -205,7 +202,6 @@ int main(void)
   			display7SEG(led_buffer[index]);
           	break ;
           case 3:
-              // Display the forth 7 SEG with led_buffer [3]
   			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, 1);
   			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, 1);
   			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, 1);
@@ -229,7 +225,7 @@ int main(void)
     /* USER CODE END WHILE */
 
 	  if(timer0_flag==1){
-		  setTimer0(1000);
+		  setTimer0(500);
 		  second++;
 		  if ( second >= 60) {
 			  second = 0;
@@ -244,8 +240,7 @@ int main(void)
 		  }
 		  updateClockBuffer();
 		  update7SEG(index_led);
-		  index_led++;
-		  if(index_led >= 4) index_led = 0;
+		  if(++index_led >= MAX_LED) index_led = 0;
     /* USER CODE BEGIN 3 */
 	  }
 	  if(timer1_flag == 1){
