@@ -63,7 +63,7 @@ int counterDot_FLAG = 0;
 int counterDot = 100; // 1000 ms = 100 * 10 ms
 
 int counterMatrixLED_FLAG = 0;
-int counterMatrixLED = 10; // 100 ms = 10 * 10 ms
+int counterMatrixLED = 50; // 100 ms = 10 * 10 ms
 int rowMatrixLed = 0;
 
 const int MAX_LED = 4;
@@ -75,38 +75,60 @@ int hour = 15, minute = 8, second = 50;
 int timer0_counter = 0;
 int timer0_flag = 0;
 int TIMER_CYCLE = 10;
-
+int timer2_counter =0;
+int timer2_flag = 0;
 const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
 
 // Ma trận LED để hiển thị chữ 'A'
 uint8_t matrix_buffer[8] = {
-    0x18, // 00011000
-    0x24, // 00100100
-    0x42, // 01000010
-    0x42, // 01000010
-    0x7E, // 01111110
-    0x42, // 01000010
-    0x42, // 01000010
-    0x42  // 01000010
+//    0x18, // 00011000
+//    0x24, // 00100100
+//    0x42, // 01000010
+//    0x42, // 01000010
+//    0x7E, // 01111110
+//    0x42, // 01000010
+//    0x42, // 01000010
+//    0x42  // 01000010
+		0x42, // 01000010
+		    0x42, // 01000010
+		    0x42, // 01000010
+		    0x7E, // 01111110
+		    0x42, // 01000010
+		    0x42, // 01000010
+		    0x42, // 01000010
+		    0x42  // 01000010
 };
 
-// Hàm chuyển đổi hex thành trạng thái GPIO_PinState
-GPIO_PinState convertToBit(uint8_t hexa, int index) {
-    int arr[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+//GPIO_PinState convertToBit(uint8_t hexa, int index) {
+//    int arr[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+//
+//    for(int i = 7; i >= 0; --i) {
+//        int mod = hexa % 2;
+//        hexa = hexa / 2;
+//        arr[i] = mod;
+//    }
 
-    for(int i = 7; i >= 0; --i) {
-        int mod = hexa % 2;
-        hexa = hexa / 2;
-        arr[i] = mod;
-    }
+//    if(arr[index] == 1)
+//        return SET;
+//    return RESET;
+//}
 
-    if(arr[index] == 1)
-        return SET;
-    return RESET;
+void setTimer2(int duration){
+	timer2_counter = duration  / 10;
+	timer2_flag = 0;
 }
 
-// Hàm cập nhật ma trận LED cho một hàng cụ thể
+void timer_run(){
+	if(timer2_counter > 0){
+		timer2_counter--;
+		if(timer2_counter == 0) timer2_flag = 1;
+	}
+}
+GPIO_PinState convertToBit(uint8_t hexa, int index) {
+    return (hexa & (1 << (7 - index))) ? SET : RESET;
+}
+
 void updateLEDMatrix(int index) {
     switch(index) {
         case 0:
@@ -198,29 +220,8 @@ void updateLEDMatrix(int index) {
 // Hàm callback khi Timer tạo ra ngắt
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     timer_run();
-    // Xử lý counter7Seg
-    if(counter7Seg <= 0) {
-        counter7Seg = 50;
-        ++index_led;
-        index_led = index_led % MAX_LED;
-        counter7Seg_FLAG = 1;
-    }
-    else {
-        --counter7Seg;
-    }
-
-    // Xử lý counterDot
-    if(counterDot <= 0) {
-        counterDot = 100;
-        counterDot_FLAG = 1;
-    }
-    else {
-        --counterDot;
-    }
-
-    // Xử lý counterMatrixLED
     if(counterMatrixLED <= 0) {
-        counterMatrixLED = 10;
+        counterMatrixLED = 50;
         ++rowMatrixLed;
         rowMatrixLed = rowMatrixLed % MAX_LED_MATRIX;
         counterMatrixLED_FLAG = 1;
@@ -271,36 +272,6 @@ int main(void)
 
     while (1)
     {
-//    	/* USER CODE END WHILE */
-//    	if (timer0_flag == 1) {
-//    	    ++second;
-//    	    if (second >= 60) {
-//    	        second = 0;
-//    	        ++minute;
-//    	    }
-//
-//    	    if (minute >= 60) {
-//    	        minute = 0;
-//    	        ++hour;
-//    	    }
-//
-//    	    if (hour >= 24) {
-//    	        hour = 0;
-//    	    }
-//
-//    	    updateClockBuffer();
-//    	    setTimer0(1000);
-//    	}
-//
-//    	if (counter7Seg_FLAG == 1) {
-//    	    update7SEG(index_led);
-//    	    counter7Seg_FLAG = 0;
-//    	}
-//
-//    	if (counterDot_FLAG == 1) {
-//    	    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
-//    	    counterDot_FLAG = 0;
-//    	}
     	/* USER CODE BEGIN 3 */
     	if (counterMatrixLED_FLAG == 1) {
     	    switch (rowMatrixLed) {
