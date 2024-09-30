@@ -64,7 +64,7 @@ int counterDot = 100; // 1000 ms = 100 * 10 ms
 
 int counterMatrixLED_FLAG = 0;
  // 100 ms = 10 * 10 ms
-int rowMatrixLed = 0;
+int rowMatrixLed = -1;
 
 const int MAX_LED = 4;
 int index_led = 0;
@@ -90,16 +90,16 @@ uint8_t matrix_buffer[8] = {
 //    0x42, // 01000010
 //    0x42, // 01000010
 //    0x42  // 01000010
-		0x42, // 01000010
-		    0x42, // 01000010
-		    0x42, // 01000010
-		    0x7E, // 01111110
-		    0x42, // 01000010
-		    0x42, // 01000010
-		    0x42, // 01000010
-		    0x42  // 01000010
-};
 
+		0x6C, // 01101100
+		0x99, // 10011001
+		0x81, // 10000001
+		0x81, // 10000001
+		0x81, // 10000001
+		0x42, // 01000010
+		0x24, // 00100100
+		0x18  // 00011000
+};
 
 void setTimer2(int duration){
 	timer2_counter = duration  / 10;
@@ -199,16 +199,9 @@ void updateLEDMatrix(int index) {
             HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(matrix_buffer[7], 7));
             break;
         default:
-            // Không làm gì nếu index không hợp lệ
             break;
     }
 }
-int counterMatrixLED = 50;
-// Hàm callback khi Timer tạo ra ngắt
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
-    timer_run();
-}
-
 void updateMatrix (int rowMatrixLed){
 switch (rowMatrixLed) {
     case 0:
@@ -291,21 +284,15 @@ int main(void)
     while (1)
     {
     	/* USER CODE BEGIN 3 */
-    	if (counterMatrixLED_FLAG == 1) {
-    		updateMatrix (rowMatrixLed);
-    	    updateLEDMatrix(rowMatrixLed);
-    	    counterMatrixLED_FLAG = 0;
-    	}
+    	if (timer2_flag == 1) {
+    		++rowMatrixLed;
+    	        rowMatrixLed = rowMatrixLed % MAX_LED_MATRIX;
+    	        updateMatrix(rowMatrixLed);
+    	        updateLEDMatrix(rowMatrixLed);
+    	        setTimer2(500);
+    	        timer2_flag = 0;
+    	    }
 
-        if(counterMatrixLED <= 0) {
-            counterMatrixLED = 50;
-            ++rowMatrixLed;s
-            rowMatrixLed = rowMatrixLed % MAX_LED_MATRIX;
-            counterMatrixLED_FLAG = 1;
-        }
-        else {
-            --counterMatrixLED;
-        }
 
     /* USER CODE END WHILE */
 
@@ -450,10 +437,9 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-//void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim ){
-//	timerRun();
-//
-//}
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    timer_run();
+}
 /* USER CODE END 4 */
 
 /**
