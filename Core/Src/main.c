@@ -63,7 +63,7 @@ int counterDot_FLAG = 0;
 int counterDot = 100; // 1000 ms = 100 * 10 ms
 
 int counterMatrixLED_FLAG = 0;
-int counterMatrixLED = 50; // 100 ms = 10 * 10 ms
+ // 100 ms = 10 * 10 ms
 int rowMatrixLed = 0;
 
 const int MAX_LED = 4;
@@ -100,19 +100,6 @@ uint8_t matrix_buffer[8] = {
 		    0x42  // 01000010
 };
 
-//GPIO_PinState convertToBit(uint8_t hexa, int index) {
-//    int arr[8] = {0, 0, 0, 0, 0, 0, 0, 0};
-//
-//    for(int i = 7; i >= 0; --i) {
-//        int mod = hexa % 2;
-//        hexa = hexa / 2;
-//        arr[i] = mod;
-//    }
-
-//    if(arr[index] == 1)
-//        return SET;
-//    return RESET;
-//}
 
 void setTimer2(int duration){
 	timer2_counter = duration  / 10;
@@ -216,20 +203,51 @@ void updateLEDMatrix(int index) {
             break;
     }
 }
-
+int counterMatrixLED = 50;
 // Hàm callback khi Timer tạo ra ngắt
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     timer_run();
-    if(counterMatrixLED <= 0) {
-        counterMatrixLED = 50;
-        ++rowMatrixLed;
-        rowMatrixLed = rowMatrixLed % MAX_LED_MATRIX;
-        counterMatrixLED_FLAG = 1;
-    }
-    else {
-        --counterMatrixLED;
-    }
 }
+
+void updateMatrix (int rowMatrixLed){
+switch (rowMatrixLed) {
+    case 0:
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, RESET);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, SET);
+        break;
+    case 1:
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, RESET);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, SET);
+        break;
+    case 2:
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, RESET);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, SET);
+        break;
+    case 3:
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, RESET);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, SET);
+        break;
+    case 4:
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, RESET);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, SET);
+        break;
+    case 5:
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, RESET);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, SET);
+        break;
+    case 6:
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, RESET);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
+        break;
+    case 7:
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
+        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, SET);
+        break;
+    default:
+        break;
+}
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -269,50 +287,25 @@ int main(void)
   /* USER CODE BEGIN WHILE */
 
   	//Set timer for 7ledSeg
-
+  setTimer2(500);
     while (1)
     {
     	/* USER CODE BEGIN 3 */
     	if (counterMatrixLED_FLAG == 1) {
-    	    switch (rowMatrixLed) {
-    	        case 0:
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, RESET);
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, SET);
-    	            break;
-    	        case 1:
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, RESET);
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, SET);
-    	            break;
-    	        case 2:
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, RESET);
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, SET);
-    	            break;
-    	        case 3:
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, RESET);
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, SET);
-    	            break;
-    	        case 4:
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, RESET);
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, SET);
-    	            break;
-    	        case 5:
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, RESET);
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, SET);
-    	            break;
-    	        case 6:
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, RESET);
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
-    	            break;
-    	        case 7:
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
-    	            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, SET);
-    	            break;
-    	        default:
-    	            break;
-    	    }
+    		updateMatrix (rowMatrixLed);
     	    updateLEDMatrix(rowMatrixLed);
     	    counterMatrixLED_FLAG = 0;
     	}
+
+        if(counterMatrixLED <= 0) {
+            counterMatrixLED = 50;
+            ++rowMatrixLed;s
+            rowMatrixLed = rowMatrixLed % MAX_LED_MATRIX;
+            counterMatrixLED_FLAG = 1;
+        }
+        else {
+            --counterMatrixLED;
+        }
 
     /* USER CODE END WHILE */
 
