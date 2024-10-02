@@ -82,23 +82,23 @@ int index_led_matrix = 0;
 
 // Ma trận LED để hiển thị chữ 'A'
 uint8_t matrix_buffer[8] = {
-//    0x18, // 00011000
-//    0x24, // 00100100
-//    0x42, // 01000010
-//    0x42, // 01000010
-//    0x7E, // 01111110
-//    0x42, // 01000010
-//    0x42, // 01000010
-//    0x42  // 01000010
+    0x18, // 00011000
+    0x24, // 00100100
+    0x42, // 01000010
+    0x42, // 01000010
+    0x7E, // 01111110
+    0x42, // 01000010
+    0x42, // 01000010
+    0x42  // 01000010
 
-		0x6C, // 01101100
-		0x99, // 10011001
-		0x81, // 10000001
-		0x81, // 10000001
-		0x81, // 10000001
-		0x42, // 01000010
-		0x24, // 00100100
-		0x18  // 00011000
+//		0x6C, // 01101100
+//		0x99, // 10011001
+//		0x81, // 10000001
+//		0x81, // 10000001
+//		0x81, // 10000001
+//		0x42, // 01000010
+//		0x24, // 00100100
+//		0x18  // 00011000
 };
 
 void setTimer2(int duration){
@@ -112,8 +112,31 @@ void timer_run(){
 		if(timer2_counter == 0) timer2_flag = 1;
 	}
 }
+int shiftVar=0;
 GPIO_PinState convertToBit(uint8_t hexa, int index) {
-    return (hexa & (1 << (7 - index))) ? SET : RESET;
+//    return (hexa & (1 << (7 - index))) ? SET : RESET;
+
+	int arr[16];
+	int arr_copy[16];
+
+	for (int i = 15; i >= 0; --i) {
+	    int mod = hexa % 2;
+	    hexa = hexa / 2;
+	    arr[i] = mod;
+	    arr_copy[i] = mod;
+	}
+
+    for (int index = 0; index < 16; ++index) {
+        int newIndex = index - shiftVar;
+        if (newIndex >= 0) {
+            arr[newIndex] = arr_copy[index];
+        } else {
+            arr[15 - shiftVar + 1] = arr_copy[index];
+        }
+    }
+
+    if (arr[index] == 1) return SET;
+    return RESET;
 }
 
 void updateLEDMatrix(int index) {
@@ -241,6 +264,105 @@ switch (rowMatrixLed) {
 }
 }
 
+void updateLEDMatrix2(int index) {
+    switch (index) {
+        case 0:
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(matrix_buffer[0], 4));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(matrix_buffer[0], 5));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(matrix_buffer[0], 6));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(matrix_buffer[0], 7));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(matrix_buffer[0], 8));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(matrix_buffer[0], 9));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(matrix_buffer[0], 10));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(matrix_buffer[0], 11));
+            break;
+        case 1:
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(matrix_buffer[1], 4));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(matrix_buffer[1], 5));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(matrix_buffer[1], 6));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(matrix_buffer[1], 7));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(matrix_buffer[1], 8));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(matrix_buffer[1], 9));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(matrix_buffer[1], 10));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(matrix_buffer[1], 11));
+            break;
+        case 2:
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(matrix_buffer[2], 4));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(matrix_buffer[2], 5));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(matrix_buffer[2], 6));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(matrix_buffer[2], 7));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(matrix_buffer[2], 8));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(matrix_buffer[2], 9));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(matrix_buffer[2], 10));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(matrix_buffer[2], 11));
+            break;
+        case 3:
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(matrix_buffer[3], 4));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(matrix_buffer[3], 5));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(matrix_buffer[3], 6));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(matrix_buffer[3], 7));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(matrix_buffer[3], 8));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(matrix_buffer[3], 9));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(matrix_buffer[3], 10));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(matrix_buffer[3], 11));
+            break;
+        case 4:
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(matrix_buffer[4], 4));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(matrix_buffer[4], 5));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(matrix_buffer[4], 6));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(matrix_buffer[4], 7));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(matrix_buffer[4], 8));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(matrix_buffer[4], 9));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(matrix_buffer[4], 10));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(matrix_buffer[4], 11));
+            break;
+        case 5:
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(matrix_buffer[5], 4));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(matrix_buffer[5], 5));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(matrix_buffer[5], 6));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(matrix_buffer[5], 7));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(matrix_buffer[5], 8));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(matrix_buffer[5], 9));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(matrix_buffer[5], 10));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(matrix_buffer[5], 11));
+            break;
+        case 6:
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(matrix_buffer[6], 4));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(matrix_buffer[6], 5));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(matrix_buffer[6], 6));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(matrix_buffer[6], 7));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(matrix_buffer[6], 8));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(matrix_buffer[6], 9));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(matrix_buffer[6], 10));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(matrix_buffer[6], 11));
+            break;
+        case 7:
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(matrix_buffer[7], 4));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(matrix_buffer[7], 5));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(matrix_buffer[7], 6));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(matrix_buffer[7], 7));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(matrix_buffer[7], 8));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(matrix_buffer[7], 9));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(matrix_buffer[7], 10));
+            HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(matrix_buffer[7], 11));
+            break;
+        default:
+            break;
+    }
+}
+
+
+
+void displayLEDMatrix(int num){
+	HAL_GPIO_WritePin(GPIOA, ENM0_Pin, !(num & 0x18));
+	HAL_GPIO_WritePin(GPIOA, ENM1_Pin, !(num & 0x24));
+	HAL_GPIO_WritePin(GPIOA, ENM2_Pin, !(num & 0x42));
+	HAL_GPIO_WritePin(GPIOA, ENM3_Pin, !(num & 0x42));
+	HAL_GPIO_WritePin(GPIOA, ENM4_Pin, !(num & 0x7E));
+	HAL_GPIO_WritePin(GPIOA, ENM5_Pin, !(num & 0x42));
+	HAL_GPIO_WritePin(GPIOA, ENM6_Pin, !(num & 0x42));
+	HAL_GPIO_WritePin(GPIOA, ENM7_Pin, !(num & 0x42));
+}
 /* USER CODE END 0 */
 
 /**
@@ -286,9 +408,16 @@ int main(void)
     	/* USER CODE BEGIN 3 */
     	if (timer2_flag == 1) {
     		++rowMatrixLed;
-    	        rowMatrixLed = rowMatrixLed % MAX_LED_MATRIX;
-    	        updateMatrix(rowMatrixLed);
-    	        updateLEDMatrix(rowMatrixLed);
+    	        //rowMatrixLed = rowMatrixLed % MAX_LED_MATRIX;
+
+    	         if( rowMatrixLed == 8) {
+    	         shiftVar = ( shiftVar + 1) % 16;
+    	         rowMatrixLed = rowMatrixLed % 8;
+    	         }
+
+    	         updateMatrix(rowMatrixLed);
+    	         updateLEDMatrix2(rowMatrixLed);
+//    	         displayLEDMatrix(rowMatrixLed);
     	        setTimer2(500);
     	        timer2_flag = 0;
     	    }
