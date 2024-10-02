@@ -273,9 +273,9 @@ GPIO_PinState convertToBit(uint8_t hexa, int index) {
 	...
 
 080002a4 <updateLEDMatrix>:
-    {0xc3, 0xc3, 0xc3, 0xff, 0xff, 0xc3, 0xc3, 0xc3}, // H
-    {0xc3, 0xc3, 0xc3, 0xc3, 0xc3, 0xc3, 0xff, 0x7e}, // u
-    {0xc3, 0xc3, 0xc3, 0x66, 0x3c, 0x18, 0x18, 0x18}  // y
+//    {0x7e,0x7e,0x7e,0x7e,0xff,0x7e,0x3c,0x18},
+//	{0x7e,0x7e,0x7e,0x7e,0xff,0x7e,0x3c,0x18},
+//	{0x7e,0x7e,0x7e,0x7e,0xff,0x7e,0x3c,0x18}
 };
 
 void updateLEDMatrix(int rowMatrixLed) {
@@ -485,15 +485,16 @@ int main(void)
  8000410:	681b      	ldr	r3, [r3, #0]
  8000412:	4618      	mov	r0, r3
  8000414:	f7ff ff46 	bl	80002a4 <updateLEDMatrix>
-    	        setTimer2(500);
- 8000418:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
- 800041c:	f7ff fe96 	bl	800014c <setTimer2>
+    	        setTimer2(50);
+ 8000418:	2032      	movs	r0, #50	; 0x32
+ 800041a:	f7ff fe97 	bl	800014c <setTimer2>
     	        timer2_flag = 0;
- 8000420:	4b02      	ldr	r3, [pc, #8]	; (800042c <main+0x9c>)
- 8000422:	2200      	movs	r2, #0
- 8000424:	601a      	str	r2, [r3, #0]
+ 800041e:	4b03      	ldr	r3, [pc, #12]	; (800042c <main+0x9c>)
+ 8000420:	2200      	movs	r2, #0
+ 8000422:	601a      	str	r2, [r3, #0]
     	if (timer2_flag == 1) {
- 8000426:	e7c4      	b.n	80003b2 <main+0x22>
+ 8000424:	e7c5      	b.n	80003b2 <main+0x22>
+ 8000426:	bf00      	nop
  8000428:	20000050 	.word	0x20000050
  800042c:	20000048 	.word	0x20000048
  8000430:	20000000 	.word	0x20000000
