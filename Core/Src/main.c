@@ -82,23 +82,16 @@ int index_led_matrix = 0;
 
 // Ma trận LED để hiển thị chữ 'A'
 uint8_t matrix_buffer[8] = {
-    0x18, // 00011000
-    0x24, // 00100100
-    0x42, // 01000010
-    0x42, // 01000010
-    0x7E, // 01111110
-    0x42, // 01000010
-    0x42, // 01000010
-    0x42  // 01000010
+//    0x18, // 00011000
+//    0x24, // 00100100
+//    0x42, // 01000010
+//    0x42, // 01000010
+//    0x7E, // 01111110
+//    0x42, // 01000010
+//    0x42, // 01000010
+//    0x42  // 01000010
 
-//		0x6C, // 01101100
-//		0x99, // 10011001
-//		0x81, // 10000001
-//		0x81, // 10000001
-//		0x81, // 10000001
-//		0x42, // 01000010
-//		0x24, // 00100100
-//		0x18  // 00011000
+		0x18,0x3c,0x66,0xc3,0xff,0xff,0xc3,0xc3
 };
 
 void setTimer2(int duration){
@@ -354,14 +347,14 @@ void updateLEDMatrix2(int index) {
 
 
 void displayLEDMatrix(int num){
-	HAL_GPIO_WritePin(GPIOA, ENM0_Pin, !(num & 0x18));
-	HAL_GPIO_WritePin(GPIOA, ENM1_Pin, !(num & 0x24));
-	HAL_GPIO_WritePin(GPIOA, ENM2_Pin, !(num & 0x42));
-	HAL_GPIO_WritePin(GPIOA, ENM3_Pin, !(num & 0x42));
-	HAL_GPIO_WritePin(GPIOA, ENM4_Pin, !(num & 0x7E));
-	HAL_GPIO_WritePin(GPIOA, ENM5_Pin, !(num & 0x42));
-	HAL_GPIO_WritePin(GPIOA, ENM6_Pin, !(num & 0x42));
-	HAL_GPIO_WritePin(GPIOA, ENM7_Pin, !(num & 0x42));
+	HAL_GPIO_WritePin(GPIOA, ENM0_Pin, !(num & 0x01));
+	HAL_GPIO_WritePin(GPIOA, ENM1_Pin, !(num & 0x02));
+	HAL_GPIO_WritePin(GPIOA, ENM2_Pin, !(num & 0x04));
+	HAL_GPIO_WritePin(GPIOA, ENM3_Pin, !(num & 0x08));
+	HAL_GPIO_WritePin(GPIOA, ENM4_Pin, !(num & 0x10));
+	HAL_GPIO_WritePin(GPIOA, ENM5_Pin, !(num & 0x20));
+	HAL_GPIO_WritePin(GPIOA, ENM6_Pin, !(num & 0x40));
+	HAL_GPIO_WritePin(GPIOA, ENM7_Pin, !(num & 0x80));
 }
 /* USER CODE END 0 */
 
@@ -417,8 +410,8 @@ int main(void)
 
     	         updateMatrix(rowMatrixLed);
     	         updateLEDMatrix2(rowMatrixLed);
-//    	         displayLEDMatrix(rowMatrixLed);
-    	        setTimer2(500);
+    	        // displayLEDMatrix(rowMatrixLed);
+    	        setTimer2(100);
     	        timer2_flag = 0;
     	    }
 
