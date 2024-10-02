@@ -79,29 +79,8 @@ int timer2_counter =0;
 int timer2_flag = 0;
 const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
+int currentBuffer = 0;
 
-// Ma trận LED để hiển thị chữ 'A'
-uint8_t matrix_buffer[8] = {
-
-
-//		0x6C, // 01101100
-//		0x99, // 10011001
-//		0x81, // 10000001
-//		0x81, // 10000001
-//		0x81, // 10000001
-//		0x42, // 01000010
-//		0x24, // 00100100
-//		0x18  // 00011000
-
-		    0x18, // 00011000
-		    0x24, // 00100100
-		    0x42, // 01000010
-		    0x42, // 01000010
-		    0x7E, // 01111110
-		    0x42, // 01000010
-		    0x42, // 01000010
-		    0x42  // 01000010
-};
 
 void setTimer2(int duration){
 	timer2_counter = duration  / 10;
@@ -115,52 +94,52 @@ void timer_run(){
 	}
 }
 
-
-void updateMatrix (int rowMatrixLed){
-switch (rowMatrixLed) {
-    case 0:
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, RESET);
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, SET);
-        break;
-    case 1:
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, RESET);
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, SET);
-        break;
-    case 2:
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, RESET);
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, SET);
-        break;
-    case 3:
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, RESET);
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, SET);
-        break;
-    case 4:
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, RESET);
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, SET);
-        break;
-    case 5:
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, RESET);
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, SET);
-        break;
-    case 6:
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, RESET);
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
-        break;
-    case 7:
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, RESET);
-        HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, SET);
-        break;
-    default:
-        break;
-}
+void updateMatrix(int rowMatrixLed){
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 |
+                           GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, RESET);
+    switch (rowMatrixLed) {
+        case 0:
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, SET);
+            break;
+        case 1:
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, SET);
+            break;
+        case 2:
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, SET);
+            break;
+        case 3:
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, SET);
+            break;
+        case 4:
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, SET);
+            break;
+        case 5:
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, SET);
+            break;
+        case 6:
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
+            break;
+        case 7:
+            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, SET);
+            break;
+        default:
+            break;
+    }
 }
 
 GPIO_PinState convertToBit(uint8_t hexa, int index) {
     return (hexa & (1 << (7 - index))) ? SET : RESET;
 }
 
-void updateLEDMatrix(int index) {
-    uint8_t rowData = matrix_buffer[index];
+typedef uint8_t MatrixBuffer[8];
+MatrixBuffer matrix_buffers[3] = {
+    {0xc3, 0xc3, 0xc3, 0xff, 0xff, 0xc3, 0xc3, 0xc3}, // H
+    {0xc3, 0xc3, 0xc3, 0xc3, 0xc3, 0xc3, 0xff, 0x7e}, // u
+    {0xc3, 0xc3, 0xc3, 0x66, 0x3c, 0x18, 0x18, 0x18}  // y
+};
+
+void updateLEDMatrix(int rowMatrixLed) {
+    uint8_t rowData = matrix_buffers[currentBuffer ][rowMatrixLed];
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(rowData, 0));
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(rowData, 1));
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(rowData, 2));
@@ -170,6 +149,15 @@ void updateLEDMatrix(int index) {
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(rowData, 6));
     HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(rowData, 7));
 }
+
+
+//void updateLEDMatrix(int rowMatrixLed) {
+//    uint8_t rowData = matrix_buffers[currentBuffer][rowMatrixLed];
+//    uint16_t gpio_pins[] = {GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_10, GPIO_PIN_11, GPIO_PIN_12, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15};
+//    for (int i = 0; i < 8; i++) {
+//        HAL_GPIO_WritePin(GPIOA, gpio_pins[i], convertToBit(rowData, i));
+//    }
+//}
 
 /* USER CODE END 0 */
 
@@ -215,6 +203,10 @@ int main(void)
     	/* USER CODE BEGIN 3 */
     	if (timer2_flag == 1) {
     		++rowMatrixLed;
+    	        if(rowMatrixLed>= MAX_LED_MATRIX) {
+    	        	rowMatrixLed=0;
+    	        	currentBuffer = (currentBuffer + 1) % 3;
+    	        }
     	        rowMatrixLed = rowMatrixLed % MAX_LED_MATRIX;
     	        updateMatrix(rowMatrixLed);
     	        updateLEDMatrix(rowMatrixLed);
