@@ -56,22 +56,22 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int timer0_counter = 0;
-int timer0_flag = 0;
-int TIMER_CYCLE = 10;
-
-void setTimer0(int duration) {
-    timer0_counter = duration / TIMER_CYCLE;
-    timer0_flag = 0;
-}
-
-void timer_run() {
-    if(timer0_counter > 0) {
-        timer0_counter--;
-        if(timer0_counter == 0)
-            timer0_flag = 1;
-    }
-}
+//int timer0_counter = 0;
+//int timer0_flag = 0;
+//int TIMER_CYCLE = 10;
+//
+//void setTimer0(int duration) {
+//    timer0_counter = duration / TIMER_CYCLE;
+//    timer0_flag = 0;
+//}
+//
+//void timer_run() {
+//    if(timer0_counter > 0) {
+//        timer0_counter--;
+//        if(timer0_counter == 0)
+//            timer0_flag = 1;
+//    }
+//}
 
 /* USER CODE END 0 */
 
@@ -120,42 +120,15 @@ HAL_TIM_Base_Start_IT (& htim2 ) ;
 	  int minute = 0;            // Biến lưu số phút
 	  int hour = 0;              // Biến lưu số giờ
 	  void updateClockBuffer() {
-	      int segment0 = hour / 10;
-	      int segment1 = hour % 10;
-	      int segment2 = minute / 10;
-	      int segment3 = minute % 10;
-
-	      led_buffer[0] = segment0;
-	      led_buffer[1] = segment1;
-	      led_buffer[2] = segment2;
-	      led_buffer[3] = segment3;
+	      led_buffer[0] = hour / 10;
+	      led_buffer[1] = hour % 10;
+	      led_buffer[2] = minute / 10;
+	      led_buffer[3] = minute % 10;
 	  }
 
-//	  void HAL_TIM_PeriodElapsedCallback (TIM_HandleTypeDef *htim) {
-//	      timer_run();
-//	      if(counter7Seg <= 0) {
-//	          counter7Seg = 50;
-//	          ++index_led;
-//	          index_led = index_led % 4;
-//	          counter7Seg_FLAG = 1;
-//	      } else {
-//	          --counter7Seg;
-//	      }
-//
-//	      if(counterDot <= 0) {
-//	          counterDot = 100;
-//	          counterDot_FLAG = 1;
-//	      } else {
-//	          --counterDot;
-//	      }
-//	  }
 
 
 	   while (1) {
-//	   if( timer0_flag == 1) {
-//	   HAL_GPIO_TogglePin ( Led_red_GPIO_Port , Led_red_Pin ) ;
-//	  setTimer0 (1000) ;
-//	   }
 		   if(timer0_flag == 1) {
 		       ++second;
 		       if(second >= 60) {
@@ -171,14 +144,14 @@ HAL_TIM_Base_Start_IT (& htim2 ) ;
 		       if(hour >= 24) {
 		           hour = 0;
 		       }
-
+		       display7SEG(int number);
 		       updateClockBuffer();
-		       setTimer0(1000);
+		       HAL_Delay(250);
 		   }
 
 		   if(counterDot_FLAG == 1) {
 		       HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_4);
-		       counterDot_FLAG = 0;
+		       HAL_Delay(250);
 		   }
 
 
