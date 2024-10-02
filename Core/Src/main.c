@@ -123,9 +123,9 @@ void update7SEG ( int index ) {
             break ;
     }
 }
-int second = 0;
-int minute = 0;
-int hour = 8;
+int second = 6;
+int minute = 5;
+int hour = 21;
 void updateClockBuffer() {
     led_buffer[0] = hour / 10;
     led_buffer[1] = hour % 10;

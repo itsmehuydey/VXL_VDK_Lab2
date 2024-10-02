@@ -562,14 +562,14 @@ int led_buffer[4] = {1, 2, 3, 4};
  80004d8:	f107 040c 	add.w	r4, r7, #12
  80004dc:	cb0f      	ldmia	r3, {r0, r1, r2, r3}
  80004de:	e884 000f 	stmia.w	r4, {r0, r1, r2, r3}
-int second = 0;
- 80004e2:	2300      	movs	r3, #0
+int second = 6;
+ 80004e2:	2306      	movs	r3, #6
  80004e4:	623b      	str	r3, [r7, #32]
-int minute = 0;
- 80004e6:	2300      	movs	r3, #0
+int minute = 5;
+ 80004e6:	2305      	movs	r3, #5
  80004e8:	607b      	str	r3, [r7, #4]
-int hour = 8;
- 80004ea:	2308      	movs	r3, #8
+int hour = 21;
+ 80004ea:	2315      	movs	r3, #21
  80004ec:	60bb      	str	r3, [r7, #8]
     led_buffer[3] = minute % 10;
 }
