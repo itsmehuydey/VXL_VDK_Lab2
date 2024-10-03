@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "Bai1.h"
+#include "bai1.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -222,49 +222,30 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
-//int counter = 100;
-// void HAL_TIM_PeriodElapsedCallback ( TIM_HandleTypeDef * htim )
-//{
-// counter --;
-// if( counter <= 0) {
-// counter = 100;
-//  HAL_GPIO_TogglePin ( Led_red_GPIO_Port , Led_red_Pin ) ;
-// }
-// }
-
 int counter = 50;
-int activeDisplay = 0;  // 0 for first display, 1 for second
-
+int control = 0;  // 0 for first display, 1 for second
+int number =1;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     counter--;
     if (counter <= 0) {
         counter = 50;
 
-        // Alternate between the two displays
         if (activeDisplay == 0) {
-            // Enable first display, disable second
-            HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET); // Activate first display
-            HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);   // Deactivate second display
-
-            // Display '1' on the first 7-segment display
-            display7SEG(1);
-            activeDisplay = 1;  // Next time, switch to the second display
+            HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
+            HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+            display7SEG(number);
+            control = 1;
         } else {
-            // Enable second display, disable first
             HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
             HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
-
-            // Display '2' on the second 7-segment display
-            display7SEG(2);
-            activeDisplay = 0;  // Next time, switch to the first display
+            display7SEG(number);
+            control = 0;
+            if (number == 1) number = 2; else number = 1;
         }
-
-        // Optionally, toggle an LED for visual feedback (e.g., pin A5)
-        HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+        HAL_GPIO_TogglePin(Led_red_GPIO_Port, Led_red_Pin);
     }
 }
-
 /* USER CODE END 4 */
 
 /**
