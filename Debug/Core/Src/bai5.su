@@ -1,0 +1,4 @@
+bai5.c:15:6:updateClockBuffer	4	static
+bai5.c:22:6:update7SEG	16	static
+bai5.c:49:6:display7SEG	16	static
+bai5.c:132:6:clearNumber	8	static
