@@ -76,12 +76,12 @@ switch (rowMatrixLed) {
 
 void updateLEDMatrix(int rowMatrixLed) {
     uint8_t rowData = matrix_buffer[rowMatrixLed];
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(rowData, 4));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(rowData, 5));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(rowData, 6));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(rowData, 7));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(rowData, 8));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(rowData, 9));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(rowData, 10));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(rowData, 11));
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(rowData, 1));
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(rowData, 2));
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(rowData,3));
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(rowData, 4));
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(rowData, 5));
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(rowData,6));
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(rowData, 7));
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(rowData,8));
 }

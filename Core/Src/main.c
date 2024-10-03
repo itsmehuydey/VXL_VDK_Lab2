@@ -103,12 +103,12 @@ int main(void)
     	/* USER CODE BEGIN 3 */
     	if (timer2_flag == 1) {
     	         if(++row >= 8) {
-    	        	 shiftVar = ( shiftVar + 1) % 8;
+    	        	 shiftVar = ( shiftVar + 1) % 16;
     	        	 row = row % 8;
     	         }
     	        updateMatrix(row);
     	        updateLEDMatrix(row);
-    	        setTimer2(100);
+    	        setTimer2(50);
     	        timer2_flag = 0;
     	    }
 
