@@ -4,7 +4,7 @@
  *  Created on: Sep 23, 2024
  *      Author: pc
  */
-#include "bai2.h"
+#include <bai4.h>
 
 void display7SEG(int number)
 {
