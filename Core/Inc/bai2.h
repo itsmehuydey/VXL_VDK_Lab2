@@ -12,6 +12,6 @@ extern int counterDot;
 extern int currentIndex7Seg;
 
  void display7SEG(int number);
-// void clearNumber();
+ void update7SEG(int index);
 
 #endif /* INC_BAI2_H_ */

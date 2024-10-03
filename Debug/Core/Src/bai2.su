@@ -1,2 +1,2 @@
-bai2.c:60:6:display7SEG	16	static
-bai2.c:143:6:clearNumber	8	static
+bai2.c:9:6:display7SEG	16	static
+bai2.c:94:6:update7SEG	16	static
