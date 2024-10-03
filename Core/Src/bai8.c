@@ -6,17 +6,17 @@
  */
 #include <bai8.h>
 
-
-int hour = 21 , minute = 10 , second = 55;
+const int MAX_LED = 4;
+int index_led = 0;
+int led_buffer [4] = {1 , 2 , 3 , 4};
 int timer0_counter = 0;
 int timer0_flag = 0;
 int timer1_counter = 0;
 int timer1_flag = 0;
 int TIMER_CYCLE	= 10;
-const int MAX_LED = 4;
-int led_buffer [4] = {1 , 2 , 3 , 4};
-int index_led = 0, cnt=0;
 
+
+int hour = 16 , minute = 12 , second = 56;
 void setTimer0(int duration){
 	timer0_counter = duration  / TIMER_CYCLE;
 	timer0_flag = 0;
