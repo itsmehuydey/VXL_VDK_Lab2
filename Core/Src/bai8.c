@@ -4,19 +4,36 @@
  *  Created on: Sep 23, 2024
  *      Author: pc
  */
-#include <bai5.h>
+#include <bai8.h>
 
 
-int second = 6;
-int minute = 5;
-int hour = 21;
-int index_led=0;
-int led_buffer[4] = {1, 2, 3, 4};
-void updateClockBuffer() {
-    led_buffer[0] = hour / 10;
-    led_buffer[1] = hour % 10;
-    led_buffer[2] = minute / 10;
-    led_buffer[3] = minute % 10;
+int hour = 21 , minute = 10 , second = 55;
+int timer0_counter = 0;
+int timer0_flag = 0;
+int timer1_counter = 0;
+int timer1_flag = 0;
+int TIMER_CYCLE	= 10;
+const int MAX_LED = 4;
+int led_buffer [4] = {1 , 2 , 3 , 4};
+int index_led = 0, cnt=0;
+
+void setTimer0(int duration){
+	timer0_counter = duration  / TIMER_CYCLE;
+	timer0_flag = 0;
+}
+void setTimer1(int duration){
+	timer1_counter = duration  / TIMER_CYCLE;
+	timer1_flag = 0;
+}
+void timerRun(){
+	if(timer0_counter > 0){
+		timer0_counter--;
+		if(timer0_counter == 0) timer0_flag = 1;
+	}
+	if(timer1_counter > 0){
+		timer1_counter--;
+		if(timer1_counter == 0) timer1_flag = 1;
+	}
 }
 
 void update7SEG ( int index ) {
@@ -45,6 +62,13 @@ void update7SEG ( int index ) {
             break ;
     }
 }
+
+void updateClockBuffer (){
+	led_buffer[0] = hour / 10;
+	led_buffer[1] = hour%10;
+	led_buffer[2] = minute / 10;
+	led_buffer[3] = minute%10;
+ }
 
 void display7SEG(int number)
 {
@@ -129,12 +153,4 @@ void display7SEG(int number)
     }
 }
 
-void clearNumber(){
-    HAL_GPIO_WritePin(seg1_GPIO_Port, seg1_Pin, SET);
-    HAL_GPIO_WritePin(seg2_GPIO_Port, seg2_Pin, SET);
-    HAL_GPIO_WritePin(seg3_GPIO_Port, seg3_Pin, SET);
-    HAL_GPIO_WritePin(seg4_GPIO_Port, seg4_Pin, SET);
-    HAL_GPIO_WritePin(seg6_GPIO_Port, seg6_Pin, SET);
-    HAL_GPIO_WritePin(seg5_GPIO_Port, seg5_Pin, SET);
-    HAL_GPIO_WritePin(seg7_GPIO_Port, seg7_Pin, SET);
-}
+
