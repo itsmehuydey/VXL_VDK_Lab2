@@ -198,16 +198,16 @@ static void MX_GPIO_Init(void)
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOA, DOT_Pin|Led_red_Pin|EN0_Pin|EN1_Pin
-                          |EN3_Pin|EN2_Pin, GPIO_PIN_RESET);
+                          |EN2_Pin|EN3_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOB, seg1_Pin|seg2_Pin|seg3_Pin|seg4_Pin
                           |seg5_Pin|seg6_Pin|seg7_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pins : DOT_Pin Led_red_Pin EN0_Pin EN1_Pin
-                           EN3_Pin EN2_Pin */
+                           EN2_Pin EN3_Pin */
   GPIO_InitStruct.Pin = DOT_Pin|Led_red_Pin|EN0_Pin|EN1_Pin
-                          |EN3_Pin|EN2_Pin;
+                          |EN2_Pin|EN3_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -226,6 +226,24 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+int counter7Seg = 50;
+int counterDot = 100;
+int cnt = 0;
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    if (counterDot <= 0) {
+        counterDot = 100;
+        HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+    } else
+    	--counterDot;
+
+    if (counter7Seg <= 0) {
+        counter7Seg = 50;
+        update4seg(cnt);
+        if(++cnt>=4) cnt=0;;
+    } else {
+        --counter7Seg;
+    }
+}
 
 
 

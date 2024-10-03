@@ -10,8 +10,9 @@
 extern int counter7Seg;
 extern int counterDot;
 extern int currentIndex7Seg;
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim);
- void display7SEG(int number);
+
+void display7SEG(int number);
+void update4seg (int num);
 // void clearNumber();
 
 #endif /* INC_BAI2_H_ */
