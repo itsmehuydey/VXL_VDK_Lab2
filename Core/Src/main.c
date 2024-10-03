@@ -18,11 +18,11 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include <bai9.h>
 #include "main.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -56,111 +56,7 @@ static void MX_GPIO_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int counter7Seg_FLAG = 0;
-int counter7Seg = 50; // 200 ms = 20 * 10 ms
 
-int counterDot_FLAG = 0;
-int counterDot = 100; // 1000 ms = 100 * 10 ms
-
-int counterMatrixLED_FLAG = 0;
- // 100 ms = 10 * 10 ms
-int rowMatrixLed = -1;
-
-const int MAX_LED = 4;
-int index_led = 0;
-int led_buffer[4] = {1, 2, 3, 4};
-
-int hour = 15, minute = 8, second = 50;
-
-int timer0_counter = 0;
-int timer0_flag = 0;
-int TIMER_CYCLE = 10;
-int timer2_counter =0;
-int timer2_flag = 0;
-const int MAX_LED_MATRIX = 8;
-int index_led_matrix = 0;
-int currentBuffer = 0;
-
-
-void setTimer2(int duration){
-	timer2_counter = duration  / 10;
-	timer2_flag = 0;
-}
-
-void timer_run(){
-	if(timer2_counter > 0){
-		timer2_counter--;
-		if(timer2_counter == 0) timer2_flag = 1;
-	}
-}
-
-void updateMatrix(int rowMatrixLed){
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8 | GPIO_PIN_9 | GPIO_PIN_10 | GPIO_PIN_11 |
-                           GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14 | GPIO_PIN_15, RESET);
-    switch (rowMatrixLed) {
-        case 0:
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_8, SET);
-            break;
-        case 1:
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_9, SET);
-            break;
-        case 2:
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, SET);
-            break;
-        case 3:
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, SET);
-            break;
-        case 4:
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, SET);
-            break;
-        case 5:
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, SET);
-            break;
-        case 6:
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SET);
-            break;
-        case 7:
-            HAL_GPIO_WritePin(GPIOB, GPIO_PIN_15, SET);
-            break;
-        default:
-            break;
-    }
-}
-
-GPIO_PinState convertToBit(uint8_t hexa, int index) {
-    return (hexa & (1 << (7 - index))) ? SET : RESET;
-}
-
-typedef uint8_t MatrixBuffer[8];
-MatrixBuffer matrix_buffers[3] = {
-    {0xc3, 0xc3, 0xc3, 0xff, 0xff, 0xc3, 0xc3, 0xc3}, // H
-    {0xc3, 0xc3, 0xc3, 0xc3, 0xc3, 0xc3, 0xff, 0x7e}, // u
-    {0xc3, 0xc3, 0xc3, 0x66, 0x3c, 0x18, 0x18, 0x18}  // y
-//    {0x7e,0x7e,0x7e,0x7e,0xff,0x7e,0x3c,0x18},
-//	{0x7e,0x7e,0x7e,0x7e,0xff,0x7e,0x3c,0x18},
-//	{0x7e,0x7e,0x7e,0x7e,0xff,0x7e,0x3c,0x18}
-};
-
-void updateLEDMatrix(int rowMatrixLed) {
-    uint8_t rowData = matrix_buffers[currentBuffer ][rowMatrixLed];
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(rowData, 0));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(rowData, 1));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(rowData, 2));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(rowData, 3));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(rowData, 4));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(rowData, 5));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(rowData, 6));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(rowData, 7));
-}
-
-
-//void updateLEDMatrix(int rowMatrixLed) {
-//    uint8_t rowData = matrix_buffers[currentBuffer][rowMatrixLed];
-//    uint16_t gpio_pins[] = {GPIO_PIN_2, GPIO_PIN_3, GPIO_PIN_10, GPIO_PIN_11, GPIO_PIN_12, GPIO_PIN_13, GPIO_PIN_14, GPIO_PIN_15};
-//    for (int i = 0; i < 8; i++) {
-//        HAL_GPIO_WritePin(GPIOA, gpio_pins[i], convertToBit(rowData, i));
-//    }
-//}
 
 /* USER CODE END 0 */
 
@@ -199,20 +95,20 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+
   setTimer2(500);
-//  displayA();
     while (1)
     {
     	/* USER CODE BEGIN 3 */
     	if (timer2_flag == 1) {
-    		++rowMatrixLed;
-    	        if(rowMatrixLed>= MAX_LED_MATRIX) {
-    	        	rowMatrixLed=0;
-    	        	currentBuffer = (currentBuffer + 1) % 3;
+    		++row;
+    	        if(row>= MAX) {
+    	        	row=0;
+    	        	current = (current + 1) % 3;
     	        }
-    	        rowMatrixLed = rowMatrixLed % MAX_LED_MATRIX;
-    	        updateMatrix(rowMatrixLed);
-    	        updateLEDMatrix(rowMatrixLed);
+    	        row = row % MAX;
+    	        updateMatrix(row);
+    	        updateLEDMatrix(row);
     	        setTimer2(50);
     	        timer2_flag = 0;
     	    }

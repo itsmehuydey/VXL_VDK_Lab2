@@ -1,1 +1,5 @@
-bai2.c:143:6:clearNumber	8	static
+bai2.c:17:6:setTimer2	16	static
+bai2.c:22:6:timer_run	4	static
+bai2.c:29:6:updateMatrix	16	static
+bai2.c:62:15:convertToBit	16	static
+bai2.c:73:6:updateLEDMatrix	24	static

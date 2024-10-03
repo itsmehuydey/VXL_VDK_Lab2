@@ -1,4 +1,4 @@
-Core/Src/bai2.o: ../Core/Src/bai2.c ../Core/Inc/bai2.h ../Core/Inc/main.h \
+Core/Src/bai9.o: ../Core/Src/bai9.c ../Core/Inc/bai9.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal.h \
  ../Core/Inc/stm32f1xx_hal_conf.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_rcc.h \
@@ -24,7 +24,7 @@ Core/Src/bai2.o: ../Core/Src/bai2.c ../Core/Inc/bai2.h ../Core/Inc/main.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim.h \
  ../Drivers/STM32F1xx_HAL_Driver/Inc/stm32f1xx_hal_tim_ex.h
 
-../Core/Inc/bai2.h:
+../Core/Inc/bai9.h:
 
 ../Core/Inc/main.h:
 
