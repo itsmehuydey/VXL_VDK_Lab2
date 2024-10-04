@@ -13,7 +13,7 @@ int timer2_counter =0;
 int timer2_flag = 0;
 const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
-int shiftVar=0;
+int dummy=0;
 
 uint8_t matrix_buffer[8] = {
 		0x18,0x3c,0x66,0xc3,0xff,0xff,0xc3,0xc3
@@ -32,7 +32,7 @@ void timer_run(){
 }
 
 GPIO_PinState convertToBit(uint8_t hexa, int index) {
-    return (hexa & (1 << (15 - index - shiftVar))) ? SET : RESET;
+    return (hexa & (1 << (15 - index - dummy))) ? SET : RESET;
 }
 
 void updateMatrix (int rowMatrixLed){
@@ -76,12 +76,12 @@ switch (rowMatrixLed) {
 
 void updateLEDMatrix(int rowMatrixLed) {
     uint8_t rowData = matrix_buffer[rowMatrixLed];
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_2, convertToBit(rowData, 1));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_3, convertToBit(rowData, 2));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_10, convertToBit(rowData,3));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, convertToBit(rowData, 4));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, convertToBit(rowData, 5));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_13, convertToBit(rowData,6));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_14, convertToBit(rowData, 7));
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, convertToBit(rowData,8));
+    HAL_GPIO_WritePin(GPIOA, ENM0_Pin, convertToBit(rowData, 1));
+    HAL_GPIO_WritePin(GPIOA, ENM1_Pin, convertToBit(rowData, 2));
+    HAL_GPIO_WritePin(GPIOA, ENM2_Pin, convertToBit(rowData,3));
+    HAL_GPIO_WritePin(GPIOA, ENM3_Pin, convertToBit(rowData, 4));
+    HAL_GPIO_WritePin(GPIOA, ENM4_Pin, convertToBit(rowData, 5));
+    HAL_GPIO_WritePin(GPIOA, ENM5_Pin, convertToBit(rowData,6));
+    HAL_GPIO_WritePin(GPIOA, ENM6_Pin, convertToBit(rowData, 7));
+    HAL_GPIO_WritePin(GPIOA, ENM7_Pin, convertToBit(rowData,8));
 }

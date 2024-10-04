@@ -103,7 +103,7 @@ int main(void)
     	/* USER CODE BEGIN 3 */
     	if (timer2_flag == 1) {
     	         if(++row >= 8) {
-    	        	 shiftVar = ( shiftVar + 1) % 16;
+    	        	 dummy = ( dummy + 1) % 16;
     	        	 row = row % 8;
     	         }
     	        updateMatrix(row);

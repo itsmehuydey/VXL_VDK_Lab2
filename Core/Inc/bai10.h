@@ -14,7 +14,7 @@ extern int timer2_counter ;
 extern int timer2_flag ;
 extern const int MAX_LED_MATRIX ;
 extern int index_led_matrix ;
-extern int shiftVar;
+extern int dummy;
 
 void setTimer2(int duration);
 void timer_run();
