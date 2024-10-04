@@ -96,7 +96,6 @@ int main(void)
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  	//Set timer for 7ledSeg
   	  setTimer2(500);
     while (1)
     {
@@ -111,8 +110,6 @@ int main(void)
     	        setTimer2(50);
     	        timer2_flag = 0;
     	    }
-
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

@@ -447,11 +447,11 @@ int main(void)
   HAL_TIM_Base_Start_IT (& htim2 ) ;
  80003f4:	481d      	ldr	r0, [pc, #116]	; (800046c <main+0x8c>)
  80003f6:	f001 f911 	bl	800161c <HAL_TIM_Base_Start_IT>
+  /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 
-  	//Set timer for 7ledSeg
   	  setTimer2(500);
  80003fa:	f44f 70fa 	mov.w	r0, #500	; 0x1f4
  80003fe:	f7ff fea5 	bl	800014c <setTimer2>
