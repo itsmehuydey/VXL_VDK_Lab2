@@ -762,7 +762,6 @@ HAL_TIM_Base_Start_IT (& htim2 ) ;
   while (1)
   {
     /* USER CODE END WHILE */
-
 	  if(timer0_flag==1){
  8000624:	4b28      	ldr	r3, [pc, #160]	; (80006c8 <main+0xd8>)
  8000626:	681b      	ldr	r3, [r3, #0]

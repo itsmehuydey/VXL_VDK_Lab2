@@ -100,7 +100,6 @@ HAL_TIM_Base_Start_IT (& htim2 ) ;
   while (1)
   {
     /* USER CODE END WHILE */
-
 	  if(timer0_flag==1){
 		  setTimer0(250);
 		  cnt++;
