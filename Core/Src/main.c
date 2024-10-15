@@ -224,24 +224,24 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 int counter = 50;
 int control = 0;  // 0 for first display, 1 for second
-int number =1;
+int number =1, activeDisplay = 0;
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     counter--;
     if (counter <= 0) {
         counter = 50;
-
-        if (activeDisplay == 0) {
+        if (control == 0) {
             HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
             HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
             display7SEG(number);
             control = 1;
+            if (number == 1) number = 2; else number = 1;
         } else {
             HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
             HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
             display7SEG(number);
             control = 0;
-            if (number == 1) number = 2; else number = 1;
+            if (number == 1) number = 1; else number = 2;
         }
         HAL_GPIO_TogglePin(Led_red_GPIO_Port, Led_red_Pin);
     }
