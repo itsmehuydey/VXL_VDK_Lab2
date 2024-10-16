@@ -228,8 +228,8 @@ static void MX_GPIO_Init(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
     if (counter7Seg <= 0) {
         counter7Seg = 50;
-        update7SEG(index_led++);
-        if (index_led >= MAX_LED) {
+        update7SEG(index_led);
+        if (++index_led >= MAX_LED) {
             index_led = 0;
         }
     } else {
